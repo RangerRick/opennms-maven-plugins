@@ -9,6 +9,12 @@
   
   <name>Groovyc Groovy Compiler</name>
   
+  <scm>
+    <connection>scm:svn:https://svn.sourceforge.net/svnroot/opennms/maven-plugins/trunk/opennms-groovyc-plugin</connection>
+    <developerConnection>scm:svn:https://svn.sourceforge.net/svnroot/opennms/maven-plugins/trunk/opennms-groovyc-plugin</developerConnection>
+    <url>https://svn.sourceforge.net/svnroot/opennms/maven-plugins/trunk/opennms-groovyc-plugin</url>
+  </scm>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -65,6 +71,15 @@
           <goalPrefix>groovyc</goalPrefix>
         </configuration>
       </plugin>
-    </plugins>
+
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <tagBase>
+            https://svn.sourceforge.net/svnroot/opennms/maven-plugins/tags
+          </tagBase>
+        </configuration>
+      </plugin>
+     </plugins>
   </build>
 </project>
