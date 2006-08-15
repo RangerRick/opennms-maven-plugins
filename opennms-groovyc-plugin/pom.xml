@@ -3,16 +3,16 @@
     
   <groupId>org.opennms.maven.plugins</groupId>
   <artifactId>opennms-groovyc-plugin</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
     
   <packaging>maven-plugin</packaging>
   
   <name>Groovyc Groovy Compiler</name>
   
   <scm>
-    <connection>scm:svn:https://svn.sourceforge.net/svnroot/opennms/maven-plugins/trunk/opennms-groovyc-plugin</connection>
-    <developerConnection>scm:svn:https://svn.sourceforge.net/svnroot/opennms/maven-plugins/trunk/opennms-groovyc-plugin</developerConnection>
-    <url>https://svn.sourceforge.net/svnroot/opennms/maven-plugins/trunk/opennms-groovyc-plugin</url>
+    <connection>scm:svn:https://svn.sourceforge.net/svnroot/opennms/maven-plugins/tags/opennms-groovyc-plugin-1.0.2</connection>
+    <developerConnection>scm:svn:https://svn.sourceforge.net/svnroot/opennms/maven-plugins/tags/opennms-groovyc-plugin-1.0.2</developerConnection>
+    <url>https://svn.sourceforge.net/svnroot/opennms/maven-plugins/tags/opennms-groovyc-plugin-1.0.2</url>
   </scm>
 
   <dependencies>
