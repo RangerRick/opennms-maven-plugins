@@ -3,16 +3,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opennms.maven.plugins</groupId>
   <artifactId>opennms-plugin-parent</artifactId>
-  <version>1</version>
+  <version>2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Parent for OpenNMS plugins</name>
   <description>
     Parent file to OpenNMS Maven Plugins that provides configuration that can be shared by all OpenNMS plugins
   </description>
   <scm>
-    <connection>scm:svn:https://opennms.svn.sourceforge.net/svnroot/opennms/maven-plugins/tags/opennms-plugin-parent-1</connection>
-    <developerConnection>scm:svn:https://opennms.svn.sourceforge.net/svnroot/opennms/maven-plugins/tags/opennms-plugin-parent-1</developerConnection>
-    <url>https://opennms.svn.sourceforge.net/svnroot/opennms/maven-plugins/tags/opennms-plugin-parent-1</url>
+    <connection>scm:svn:https://opennms.svn.sourceforge.net/svnroot/opennms/maven-plugins/trunk</connection>
+    <developerConnection>scm:svn:https://opennms.svn.sourceforge.net/svnroot/opennms/maven-plugins/trunk</developerConnection>
+    <url>https://opennms.svn.sourceforge.net/svnroot/opennms/maven-plugins/trunk</url>
   </scm>
   <build>
     <plugins>
