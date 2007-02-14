@@ -33,4 +33,17 @@
       <version>2.1</version>
     </dependency>
   </dependencies>
+  <repositories>
+    <!-- Always need to add this so we can bootstrap -->
+    <repository>
+      <id>opennms-repo</id>
+      <name>OpenNMS Maven Repository</name>
+      <url>http://repo.opennms.org/maven2</url>
+    </repository>
+    <repository>
+      <id>opennms-snapshots</id>
+      <name>OpenNMS Snapshot Maven Repository</name>
+      <url>http://repo.opennms.org/snapshots</url>
+    </repository>
+  </repositories>
 </project>
