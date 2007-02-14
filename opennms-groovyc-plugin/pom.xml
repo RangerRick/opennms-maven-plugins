@@ -5,6 +5,7 @@
     <groupId>org.opennms.maven.plugins</groupId>
     <artifactId>opennms-plugin-parent</artifactId>
     <version>1</version>
+    <relativePath>../opennms-plugin-parent</relativePath>
   </parent>
     
   <artifactId>opennms-groovyc-plugin</artifactId>
