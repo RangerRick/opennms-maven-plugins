@@ -4,7 +4,7 @@
   <groupId>org.opennms.maven.plugins</groupId>
   <artifactId>opennms-warmerge-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.3</version>
   <name>opennms-warmerge-plugin Maven Mojo</name>
   <url>http://maven.apache.org</url>
   <build>
@@ -40,6 +40,11 @@
       <groupId>org.codehaus.cargo</groupId>
       <artifactId>cargo-core-api-module</artifactId>
       <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-archiver</artifactId>
+      <version>1.0-alpha-12</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
