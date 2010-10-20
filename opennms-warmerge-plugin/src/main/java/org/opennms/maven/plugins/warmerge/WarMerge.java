@@ -51,7 +51,7 @@ import org.codehaus.plexus.archiver.util.DefaultFileSet;
  *
  * @goal warmerge
  * @phase package
- * @requiresDependencyResolution "runtime"
+ * @requiresDependencyResolution runtime
  */
 public class WarMerge extends AbstractMojo {
 	/**
