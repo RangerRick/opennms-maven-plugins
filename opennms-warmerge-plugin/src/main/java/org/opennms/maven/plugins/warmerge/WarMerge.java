@@ -1,7 +1,7 @@
 package org.opennms.maven.plugins.warmerge;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Based Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
+import org.codehaus.plexus.archiver.manager.DefaultArchiverManager;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 import org.codehaus.plexus.archiver.util.DefaultFileSet;
 
@@ -50,6 +51,7 @@ import org.codehaus.plexus.archiver.util.DefaultFileSet;
  *
  * @goal warmerge
  * @phase package
+ * @requiresDependencyResolution "runtime"
  */
 public class WarMerge extends AbstractMojo {
 	/**
@@ -115,7 +117,7 @@ public class WarMerge extends AbstractMojo {
     		getLog().debug("WARMERGE: processing WAR file: " + warFile.getPath());
     		String webXml = processWarFile(workDir, warFile);
 
-    		Map<String,String> contents = tokenizeXml(webXml);
+    		final Map<String,String> contents = tokenizeXml(webXml);
 
     		for (final String key : contents.keySet()) {
     			List<String> tokenValues = webXmlTokens.get(key);
@@ -137,7 +139,7 @@ public class WarMerge extends AbstractMojo {
     		throw new MojoExecutionException("no war files were processed, or " + m_primaryWar + " did not match any war file!");
     	}
 
-    	String finalWebXml = combineWebXmls(primaryXml, webXmlTokens);
+    	final String finalWebXml = combineWebXmls(primaryXml, webXmlTokens);
 
     	try {
         	File webXmlFile = new File(m_webappDirectory + File.separator + "WEB-INF" + File.separator + "web.xml");
@@ -148,29 +150,29 @@ public class WarMerge extends AbstractMojo {
 			throw new MojoExecutionException("unable to write new web.xml", e);
 		}
 
-    	File warFile = getProject().getArtifact().getFile();
+		final File warFile = getProject().getArtifact().getFile();
 
-    	JarArchiver archiver = new JarArchiver();
+		final JarArchiver archiver = new JarArchiver();
 		archiver.setDestFile(warFile);
 		archiver.setIncludeEmptyDirs(true);
 
-		DefaultFileSet fileSet = new DefaultFileSet();
+		final DefaultFileSet fileSet = new DefaultFileSet();
 		fileSet.setDirectory(workDir);
 		try {
 			archiver.addFileSet(fileSet);
-		} catch (ArchiverException e) {
+		} catch (final ArchiverException e) {
 			throw new MojoExecutionException("an error occurred archiving " + workDir.getPath(), e);
 		}
 		try {
 			archiver.createArchive();
-		} catch (ArchiverException e) {
+		} catch (final ArchiverException e) {
 			throw new MojoExecutionException("an error occurred archiving " + workDir.getPath(), e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new MojoExecutionException("an error occurred writing " + workDir.getPath(), e);
 		}
     }
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	private String combineWebXmls(final String templateXml, final Map<String, List<String>> webXmlTokens) throws MojoExecutionException {
     	final StringReader stringReader = new StringReader(templateXml);
     	StringBuffer finalWebXml = new StringBuffer();
@@ -213,7 +215,7 @@ public class WarMerge extends AbstractMojo {
 				}
 	    		
 	    	}
-    	} catch (IOException e) {
+    	} catch (final IOException e) {
     		throw new MojoExecutionException("an error occurred reading the primary web.xml", e);
     	} finally {
     		IOUtils.closeQuietly(stringReader);
@@ -229,8 +231,8 @@ public class WarMerge extends AbstractMojo {
 
 		final StringBuffer tokenizedXml = new StringBuffer();
 
-		StringReader stringReader = new StringReader(xml);
-		BufferedReader reader = new BufferedReader(stringReader);
+		final StringReader stringReader = new StringReader(xml);
+		final BufferedReader reader = new BufferedReader(stringReader);
 		String line = null;
 		Matcher matcher = null;
 		boolean inSection = false;
@@ -262,7 +264,7 @@ public class WarMerge extends AbstractMojo {
 					}
 				}
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new MojoExecutionException("unable to read web.xml", e);
 		}
 
@@ -276,11 +278,11 @@ public class WarMerge extends AbstractMojo {
 		FileReader fr = null;
 
 		try {
-			UnArchiver unarchiver = m_archiverManager.getUnArchiver(warFile);
+			final UnArchiver unarchiver = m_archiverManager.getUnArchiver(warFile);
 			unarchiver.setSourceFile(warFile);
 			unarchiver.setDestDirectory(workDir);
 			unarchiver.extract("WEB-INF/web.xml", workDir);
-			File tempFile = new File(workDir, "WEB-INF/web.xml");
+			final File tempFile = new File(workDir, "WEB-INF/web.xml");
 			sw = new StringWriter();
 			fr = new FileReader(tempFile);
 			IOUtils.copy(fr, sw);
@@ -288,27 +290,38 @@ public class WarMerge extends AbstractMojo {
 			sw.close();
 			tempFile.delete();
 			rawXml = sw.toString();
-		} catch (IOException e) {
+		} catch (final IOException e) {
+			throw new MojoExecutionException("unable to create temporary directory", e);
+		} catch (final ArchiverException e) {
+			throw new MojoExecutionException("unable to unarchive " + warFile.getPath(), e);
+		} catch (final NoSuchArchiverException e) {
+			throw new MojoExecutionException("unable to determine unarchiver for " + warFile.getPath(), e);
+		} finally {
 			IOUtils.closeQuietly(fr);
 			IOUtils.closeQuietly(sw);
-			throw new MojoExecutionException("unable to create temporary directory", e);
-		} catch (ArchiverException e) {
-			throw new MojoExecutionException("unable to unarchive " + warFile.getPath(), e);
-		} catch (NoSuchArchiverException e) {
-			throw new MojoExecutionException("unable to determine unarchiver for " + warFile.getPath(), e);
 		}
 		return rawXml;
 	}
 
-	@SuppressWarnings("unchecked")
-	private void getWarFiles() {
+	private void getWarFiles() throws MojoExecutionException {
 		final ArtifactFilter filter = new WarArtifactFilter();
-    	for (final Iterator<Artifact> iter = getProject().getArtifacts().iterator(); iter.hasNext();) {
-    		final Artifact artifact = (Artifact) iter.next();
-    		if (filter.include(artifact)) {
-    			m_warArchives.add(artifact);
-    		}
-    	}
+		if (getProject() == null) {
+			throw new MojoExecutionException("no project was injected!");
+		} else if (getProject().getArtifacts() == null) {
+			throw new MojoExecutionException("no artifacts were injected!");
+		} else {
+			@SuppressWarnings("unchecked")
+			final Iterator<Artifact> iter = getProject().getArtifacts().iterator();
+			if (! iter.hasNext()) {
+				throw new MojoExecutionException("no dependencies were found!");
+			}
+			while (iter.hasNext()) {
+				final Artifact artifact = iter.next();
+	    		if (filter.include(artifact)) {
+	    			m_warArchives.add(artifact);
+	    		}
+	    	}
+		}
 	}
 
     /**
@@ -329,11 +342,17 @@ public class WarMerge extends AbstractMojo {
         this.project = project;
     }
 
+	public void setArchiverManager(final DefaultArchiverManager archiverManager) {
+		m_archiverManager = archiverManager;
+	}
+
+    public void setWarArchives(final List<Artifact> archives) {
+    	m_warArchives.clear();
+    	m_warArchives.addAll(archives);
+    }
+
     private static class WarArtifactFilter implements ArtifactFilter {
-		private ScopeArtifactFilter m_scopeFilter;
-		public WarArtifactFilter() {
-			m_scopeFilter = new ScopeArtifactFilter(Artifact.SCOPE_RUNTIME);
-		}
+		private ScopeArtifactFilter m_scopeFilter = new ScopeArtifactFilter(Artifact.SCOPE_RUNTIME);
 		public boolean include(final Artifact artifact) {
 			if (!m_scopeFilter.include(artifact)) return false;
 			if (artifact.isOptional()) return false;
