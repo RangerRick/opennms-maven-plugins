@@ -61,21 +61,6 @@ public class WarMerge extends AbstractMojo {
      */
     private MavenProject project;
 
-
-    /**
-     * @readonly
-     * @required
-     * @component
-     * */
-    private org.apache.maven.artifact.factory.ArtifactFactory artifactFactory;
-
-    /**
-     * @readonly
-     * @required
-     * @component
-     * */
-    private org.apache.maven.artifact.resolver.ArtifactResolver resolver;
-
     /**
      * @readonly
      * @required
@@ -163,19 +148,9 @@ public class WarMerge extends AbstractMojo {
 			throw new MojoExecutionException("unable to write new web.xml", e);
 		}
 
-    	String fileName = project.getArtifactId() + "-" + project.getVersion() + "-merged.war";
+    	File warFile = getProject().getArtifact().getFile();
 
     	JarArchiver archiver = new JarArchiver();
-    	/*
-    	try {
-    		archiver = m_archiverManager.getArchiver("jar");
-		} catch (NoSuchArchiverException e) {
-			throw new MojoExecutionException("unable to get jar archiver", e);
-		}
-		*/
-
-//		File warFile = new File(this.m_outputDirectory, fileName);
-    	File warFile = getProject().getArtifact().getFile();
 		archiver.setDestFile(warFile);
 		archiver.setIncludeEmptyDirs(true);
 
